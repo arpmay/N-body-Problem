@@ -9,7 +9,6 @@ Python code for simulating the gravitational interactions between celestial obje
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -20,7 +19,7 @@ The N-Body Simulation is a Python code that models the gravitational interaction
 ## Installation
 
 1. Clone the repository:
-git clone https://github.com/your_username/n-body-simulation.git
+git clone https://github.com/arpmay/N-body-Problem.git
 
 2. Install the required dependencies:
 pip install numpy matplotlib
