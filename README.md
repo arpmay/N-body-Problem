@@ -38,7 +38,7 @@ pip install numpy matplotlib
 3. Run the simulation:
 python main.py
 
-4. Visualize the trajectories of the particles using the provided 3D plot or animation (uncomment the code in `n_body_simulation.py`).
+4. Visualize the trajectories of the particles using the provided 3D plot or animation (uncomment the code in `main.py`).
 
 ## Contributing
 
