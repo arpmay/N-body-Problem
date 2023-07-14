@@ -40,6 +40,9 @@ python main.py
 
 4. Visualize the trajectories of the particles using the provided 3D plot or animation (uncomment the code in `main.py`).
 
+## Example
+![Particle Trajectories Animation](result.gif)
+
 ## Contributing
 
 Contributions are welcome! If you would like to contribute to this project, please fork the repository, make your changes, and submit a pull request.
