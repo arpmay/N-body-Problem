@@ -41,6 +41,8 @@ python main.py
 4. Visualize the trajectories of the particles using the provided 3D plot or animation (uncomment the code in `main.py`).
 
 ## Example
+
+The animation below showcases an example simulation involving four bodies. The simulation consists of one massive central body and three satellite bodies orbiting around it under the influence of gravitational forces. 
 ![Particle Trajectories Animation](result.gif)
 
 ## Contributing
