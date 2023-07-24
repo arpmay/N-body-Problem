@@ -1,13 +1,12 @@
-from numpy import sqrt
+import numpy as np
 
-def acceleration(q, m, i):
-    n = len(q)
-    A = 0
-    B = 0
-    for j in range(n):
-        if j == i:
-            continue
-        dist = sqrt((q[0][i] - q[0][j])**2 + (q[1][i] - q[1][j])**2)
-        A = A + (m[j]*(q[0][j] - q[0][i]))/(dist**3)
-        B = B + (m[j]*(q[1][j] - q[1][i]))/(dist**3)
-    return [A, B]
+def acceleration(r, m):
+    G = 6.67*(10**(-4))  # Universal Gravitational constant
+    n = len(r)
+    a = np.zeros((2,n))
+    for i in range(n):
+        for j in range(n):
+            if i != j:
+                rij = r[:,i] - r[:,j]
+                a[:,i] -= G * m[j] * rij / np.linalg.norm(rij)**3
+    return a

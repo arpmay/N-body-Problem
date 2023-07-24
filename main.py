@@ -1,103 +1,44 @@
 import numpy as np
 from A import acceleration
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
 # SIMULATION PARAMETERS
-k = 4  # number of bodies
-G = 6.67*(10**(-6))  # Universal Gravitational constant
+k = 5  # number of bodies
+G = 6.67 * (10 ** (-4))  # Universal Gravitational constant
 dt = 0.001  # timestep in seconds
 total_time = 5
-n = int(total_time/dt)  # number of timesteps
+n = int(total_time / dt)  # number of timesteps
 
 # INITIAL PARAMETERS
 # INITIAL positions
-x0 = np.array([0, 0, 1, 1])
-y0 = np.array([0, 1, 0, 1])
-
+r0 = np.random.rand(2, k)
 # INITIAL Velocities
-vx0 = np.array([0, 0.1, 0, 0])
-vy0 = np.array([0, 0, 0.1, -0.1])
+v0 = np.random.rand(2, k)
 
 # MASSES
-m = np.array([100000, 1, 1, 1])
+m = np.random.uniform(0.1, 10000, [1, k])[0]
 
-# Arrays to save states
-x = [x0]
-y = [y0]
-ux = [vx0]
-uy = [vy0]
-t = [0]
+# Runge-Kutta 4th order method
+r = np.zeros((2, k, n))
+v = np.zeros((2, k, n))
+r[:, :, 0] = r0
+v[:, :, 0] = v0
 
-for i in range(n):
-    x_new = []
-    y_new = []
-    ux_new = []
-    uy_new = []
-    for j in range(k):
-        a = acceleration([x[i], y[i]], m, j)
-        x_new.append(dt*dt*a[0]*G + x[i][j] + dt*ux[i][j])
-        y_new.append(dt * dt * a[1] * G + y[i][j] + dt * uy[i][j])
-        ux_new.append((x_new[j]-x[i][j])/dt)
-        uy_new.append((y_new[j] - y[i][j]) / dt)
-    x.append(x_new)
-    y.append(y_new)
-    ux.append(ux_new)
-    uy.append(uy_new)
-    t.append(t[i] + dt)
+for i in range(n - 1):
+    k1_v = dt * acceleration(r[:, :, i], m)
+    k1_r = dt * v[:, :, i]
 
-x = np.transpose(x)
-y = np.transpose(y)
+    k2_v = dt * acceleration(r[:, :, i] + 0.5 * k1_r, m)
+    k2_r = dt * (v[:, :, i] + 0.5 * k1_v)
 
-ax = plt.figure().add_subplot(projection='3d')
-for i in range(k):
-    ax.plot(x[i], y[i], t, label=f'Particle {i+1}')
+    k3_v = dt * acceleration(r[:, :, i] + 0.5 * k2_r, m)
+    k3_r = dt * (v[:, :, i] + 0.5 * k2_v)
 
-ax.legend()
+    k4_v = dt * acceleration(r[:, :, i] + k3_r, m)
+    k4_r = dt * (v[:, :, i] + k3_v)
 
-plt.show()
+    v[:, :, i + 1] = v[:, :, i] + (k1_v + 2 * k2_v + 2 * k3_v + k4_v) / 6
+    r[:, :, i + 1] = r[:, :, i] + (k1_r + 2 * k2_r + 2 * k3_r + k4_r) / 6
 
-# import matplotlib.pyplot as plt
-# from matplotlib.animation import FuncAnimation
-#
-# # Example data
-# time = t # Time instants
-# x1 = x[0]  # X-coordinates
-# y1 = y[0]  # Y-coordinates
-# x2 = x[1]
-# y2 = y[1]
-# x3 = x[2]
-# y3 = y[2]
-#
-#
-#
-# # Create a figure and axes
-# fig, ax = plt.subplots()
-# # ax.set_xlim(min(min(x1), min(x2), min(x3)) - 1, max(max(x1), max(x2), max(x3)) + 1)
-# # ax.set_ylim(min(min(y1), min(y2), min(y3)) - 1, max(max(y1), max(y2), max(y3)) + 1)
-# ax.set_xlim(-0.5, 0.5)
-# ax.set_ylim(-2, 2)
-#
-# scatter = []
-# for i in range(k):
-#     scatter.append(ax.scatter([], [], marker='o', label=f'Particle {i}'))
-#
-#
-# # Animation update function
-# def update(frame):
-#
-#     for i in range(k):
-#         scatter[i].set_offsets([[x[i][frame], y[i][frame]]])
-#
-#     return scatter
-#
-# # Create the animation
-# animation = FuncAnimation(fig, update, frames=len(time), interval=1, blit=True)
-#
-# # Display the animation
-# plt.xlabel('X-coordinate')
-# plt.ylabel('Y-coordinate')
-# plt.title('Particle Trajectories Animation')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
-# plt.show()
-
+# Plotting code remains the same
